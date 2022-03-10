@@ -8,11 +8,13 @@ int main()
 {
     int t, n;//테스트 케이스 개수, 지원자 숫자
     cin>>t;
+    vector<int> arr; //결과를 담을 배열
     
-     for (int i=0;i<t;i++){
+    
+    for (int i=0;i<t;i++){
         cin>>n;
         
-        vector<pair<int,int>> grades(n);
+        vector<pair<int,int>> grades;
         
         for (int i=0;i<n;i++) {
             int a,b;  //지원자 서류심사 성적순위, 면접 성적 순위
@@ -21,21 +23,25 @@ int main()
         }    
         
     
-    
     sort(grades.begin(), grades.end()); //서류심사 순으로 정렬
     
     int temp=0;
     int result=1; // 서류심사 1위 지원자는 무조건 선발
     
-    //서류심사가 높은 순서부터 내려가면서 면접순위가 낮은 지원자 수를 센다
+    //서류심사가 높은 순서부터 내려가면서 면접순위가 낮은(점수 높은) 지원자 수를 센다
     for(int i=1; i<n; i++){
         
         if(grades[temp].second>grades[i].second){
             result++;
-            temp++;
         }
-        cout<<result<<"\n";
+        temp=i;
+    arr[i]=result;
     }
+  
 
  }
+    for(int i=1;i<t;i++){
+    cout<<arr[t]<<"\n";
+}   
+
 }

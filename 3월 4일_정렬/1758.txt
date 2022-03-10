@@ -1,0 +1,32 @@
+#include <iostream>
+#include <vector>
+#include <algorithm>
+
+using namespace std;
+
+int main()
+{
+    //입력
+    int n, t;//사람의 수, 각각의 팁, 팁의 합
+    long long sum=0;//팁의 합
+    
+   cin>>n;
+   
+   vector<int> arr;
+   for (int i=0; i<n; i++){
+   cin>>t;
+   arr.push_back(t);
+   }
+   //원래주려고 했던 팁 기준 내림차순 정렬
+   sort(arr.begin(), arr.end(), greater<int>());
+   
+   //팁의 최댓값 구하기
+   for(int i=0; i<n; i++){
+       if (arr[i]-i<=0)
+       break;
+       sum+=(arr[i]-i);
+   }
+   cout<<sum;
+   
+   return 0;
+}

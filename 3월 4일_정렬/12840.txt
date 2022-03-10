@@ -1,0 +1,38 @@
+#include <iostream>
+#include <vector>
+
+using namespace std;
+ 
+int main()
+{
+    //입력
+    int h, m, s;
+    int n, q, c, t ; //쿼리의 개수, 쿼리의 종류, 돌리는 시간, 초로 환산한 시간
+    cin>>h>>m>>s; // 현재 시간 입력받기
+    t = 3600*h + 60*m+ s;
+    
+    cin>>n; //쿼리의 개수 입력받기. 쿼리의 개수 만큼 시행 반복
+    
+    for(int i=0; i<n; i++){
+        cin>>q; //쿼리의 종류와 시간 입력 받음. 쿼리가 3일때 시간 입력 안받는 문제?
+        
+        if(q==3) 
+        cout<<t/3600<<" "<<(t/60)%60 << " "<< t%60<<"\n";
+        
+        else if(q==1){//앞으로로 c초 
+            cin>>c;
+            t = (t+c)%86400;
+        }
+        else{ //뒤로 c초 
+            cin>>c;
+            t = (t-c)%86400;
+            while(c<0){
+                c+=86400; //시간이 음수가 나오는 문제 해결
+            }
+        }
+        
+    }  
+    
+    
+    return 0;
+}
