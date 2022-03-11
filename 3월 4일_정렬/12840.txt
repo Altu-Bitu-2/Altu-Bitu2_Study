@@ -1,0 +1,56 @@
+#include <iostream>
+#include <vector>
+
+using namespace std;
+
+const int MINUTE = 60; //분을 초로 환산
+const int HOUR = 60*MINUTE; //시간을 초로 환산
+const int DAY= 24*HOUR;// 하루를 초로 환산
+
+//
+int changeTime(int t, int c){
+    // 돌리는 초가 하루보다 클 때 하루가 넘어가지 않도록 모듈러 연산
+    int change_value = c % DAY;
+    if (t==2) { //시간 뒤로 보내기
+        change_value = -change_value;
+    }
+    return change_value;
+}
+ 
+int main()
+{
+    //입출력 속도 향상
+    ios_base::sync_with_stdio(false);
+    cin.tie(NULL);
+    
+    int h, m, s; // 시간, 분, 초
+    int q, t, c, second=0 ; //쿼리의 개수, 쿼리의 종류, 돌리는 시간, 초로 환산한 시간
+    
+    //입력
+    cin>>h>>m>>s; // 현재 시간 입력받기
+    cin >> q; // //쿼리의 개수 입력받기. 
+    
+    //시간을 초로 환산 
+    second = h * HOUR + MINUTE*m + s;
+    
+    while(q--) { //쿼리의 개수 만큼 시행 반복
+    cin>>t; // 쿼리의 종류
+    
+    if (t==3){ //시계가 가리키는 시간 출력
+    second %=DAY; //하루가 넘어갈 때를 대비하여 모듈러 연산
+    
+    h = second / HOUR; // 초를 시간으로 나타내기
+    m = (second % HOUR) / MINUTE; // 초를 분으로 나타내기
+    s = (second % HOUR) % MINUTE; // 남은 초 나타내기
+    cout << h << ' '<< m << ' '<<s<<'\n'; 
+    } else { //t=1 또는 2일때/ 시계 앞으로 또는 뒤로 돌리기
+    cin >>c;
+    second+=changeTime(t,c);
+    if (second < 0 )// 전날로 넘어가서 음수가 나오는 경우 
+    second +=DAY; //하루를 더해서 양수로 나타냄. 만약 뒤로 돌리는 수가 하루 이상(모듈러 연산X)일 경우 하루를 더해도 여전히 음수임. 
+    }
+    
+}
+return 0;
+
+}

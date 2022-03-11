@@ -1,0 +1,26 @@
+#include <iostream>
+#include <vector>
+#include <algorithm>
+
+using namespace std;
+
+int main()
+{
+    //입력
+    int n,x,y; //점의 개수, x,y좌표
+    cin>>n;
+    
+   vector<pair<int,int>> arr(n); //두 개체를 단일 개체로 처리하기 위한 자료형 pair 사용, first와 second로 접근 가능
+   for(int i=0; i<n; i++){
+    cin>>x>>y;
+    arr[i]={y,x}; // y좌표를을 첫번째 인자로 두어 sort 정렬시 x좌표 보다 우선순위를 가지도록
+    
+   }
+    // 연산
+    sort(arr.begin(),arr.end());
+    
+    // 출력
+    for(int i=0; i<n; i++){
+    cout<<arr[i].second<<" "<<arr[i].first<<"\n"; //x좌표, y좌표 순서로 출력
+    }
+}

@@ -1,0 +1,43 @@
+#include <iostream>
+#include <vector>
+#include <algorithm>
+
+using namespace std;
+
+int main()
+{
+    int t, n;
+    //테스트 케이스 개수, 지원자 숫자
+    cin>>t;
+
+    for (int i=0;i<t;i++){
+        cin>>n;
+        
+        vector<pair<int,int>> grades;
+        
+        for (int i=0;i<n;i++) {
+            int a,b;  //지원자 서류심사 성적순위, 면접 성적 순위
+            cin>>a>>b;
+            grades.push_back({a,b}); 
+        }    
+        
+    
+    sort(grades.begin(), grades.end()); //서류심사 순으로 정렬
+    
+    int temp=0;
+    int result=1; // 서류심사 1위 지원자는 무조건 선발
+    
+    //서류심사가 높은 순서부터 내려가면서 1번 인덱스 부터 위 지원자보다 면접순위가 낮은(점수 높은) 지원자 수를 센다
+    for(int i=1; i<n; i++){
+        
+        if(grades[temp].second>grades[i].second){
+            result++;
+            temp=i; //면접 순위를 비교하는 대상은 현재까지 면접 순위가 낮은(점수 높은) 사람이랑 비교해야하므로 조건문 안에 들어가야 가장 면접 순위가 낮은 사람을 비교대상으로 유지할 수 있다.  
+        }
+    }
+    
+   cout<<result<<"\n";
+
+ }
+
+}
