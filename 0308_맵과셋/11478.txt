@@ -1,45 +1,40 @@
 #include <iostream>
-#include <string>
-#include <set>
+#include <set> //서로 다른 문자열을 중복없이 저장 -> set
 
 using namespace std;
 
+set<string> sub; //서로 다른 문자열을 저장할 set
+
+int cntDiff(string input){ //서로다른 문자열 개수 세는 함수 선언
+    for(int i=0; i<input.length(); i++){
+        for(int j=i; j<input.length(); j++){ 
+            
+     /*문자열 형성되는 구간
+        0-0 0-1 0-2 0-3 0-4 
+            1-1 1-2 1-3 1-4
+                2-2 2-3 2-4
+                    3-3 3-4
+                        4-4 */
+                        
+            string temp =""; //부분 문자열 담을 문자열 생성 및 초기화
+            temp+=s[j]; //**문자열에 원소 계속 더해져서 부분 문자열 생성
+            sub.insert(temp); //set에 삽입
+        }    
+    }
+    return sub.size(); //set의 크기 = 서로다른 부분 문자열의 개수
+}   
+
+
 int main()
 {
-    //입출력 속도 향상
-    ios_base::sync_with_stdio(false);
-    cin.tie(NULL);
+    string input; //입력되는 문자열
     
-    string input,substr;  //입력되는 문자열, 부분 문자열
-    set<string> s; //서로 다른 문자열 저장할 set
+    //입력
     cin>>input;
     
-    int length = input.length(); //입력된 문자열의 길이
-    
-    /*
-    (i,j)          
-    00
-    10 11
-    20 21 22
-    30 31 32 33
-    40 41 42 43 44
-    
-    -> (j,i)
-    00 01 02 03 04
-    11 12 13 14
-    22 23 24
-    33 34
-    44 
-    */
-    for (int i=0; i<length; i++){ 
-        for(int j=0; j<i+1; j++){
-        substr = input.substr(j,i); //string 함수로 부분 문자열을 구하기
-        s.insert(substr); // set에 삽입(서로다른 문자열만 저장됨)
-        }
-    }
-    
-    cout<<s.size()<<'\n'; //set에 저장되어 있는 문자열 개수
-    
+    //연산 및 출력 
+    cout<<cntDiff(input); 
     
     return 0;
+    
 }

@@ -1,8 +1,10 @@
 #include <iostream>
-#include <map>
+#include <unordered_map>
 
 using namespace std;
 
+int t, n, m, input; // 테스트 케이스 개수 t, 수첩 1과 2의 정수개수 n,m  , 입력되는 정수 input 
+unordered_map<int,bool> test; // 실제로 본 수들
 
 int main()
 {
@@ -10,15 +12,13 @@ int main()
     ios_base::sync_with_stdio(false);
     cin.tie(NULL);
     
-    int t, n, m, input; // 테스트 케이스 개수 t, 수첩 1과 2의 정수개수 n,m  , 입력되는 정수 input 
-    map<int,bool> test; // 실제로 본 수들
-    
     //입력
     cin>>t;
    
     while(t--){
         
         cin>>n;
+        test.clear();
         
         while(n--){
             cin>>input;
