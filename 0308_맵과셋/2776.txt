@@ -1,0 +1,42 @@
+#include <iostream>
+#include <map>
+
+using namespace std;
+
+
+int main()
+{
+    //입출력 속도 향상
+    ios_base::sync_with_stdio(false);
+    cin.tie(NULL);
+    
+    int t, n, m, input; // 테스트 케이스 개수 t, 수첩 1과 2의 정수개수 n,m  , 입력되는 정수 input 
+    map<int,bool> test; // 실제로 본 수들
+    
+    //입력
+    cin>>t;
+   
+    while(t--){
+        
+        cin>>n;
+        
+        while(n--){
+            cin>>input;
+            test[input]=true;
+        }
+        
+        cin>>m;
+        
+        while(m--){
+            
+            cin>>input;
+            if (test[input] == true)
+				cout << "1\n";
+			else
+				cout << "0\n";
+        }
+        
+    }
+    
+    return 0;
+}
