@@ -7,6 +7,7 @@ set<string> sub; //서로 다른 문자열을 저장할 set
 
 int cntDiff(string input){ //서로다른 문자열 개수 세는 함수 선언
     for(int i=0; i<input.length(); i++){
+        string temp =""; //부분 문자열 담을 문자열 생성 및 초기화 (어느 구간부터 문자열이 쌓이기 시작하는지 살피자!)
         for(int j=i; j<input.length(); j++){ 
             
      /*문자열 형성되는 구간
@@ -15,9 +16,8 @@ int cntDiff(string input){ //서로다른 문자열 개수 세는 함수 선언
                 2-2 2-3 2-4
                     3-3 3-4
                         4-4 */
-                        
-            string temp =""; //부분 문자열 담을 문자열 생성 및 초기화
-            temp+=s[j]; //**문자열에 원소 계속 더해져서 부분 문자열 생성
+                    
+            temp+=input[j]; //**문자열에 원소 계속 더해져서 부분 문자열 생성
             sub.insert(temp); //set에 삽입
         }    
     }
