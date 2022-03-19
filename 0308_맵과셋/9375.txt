@@ -1,0 +1,31 @@
+#include <iostream>
+#include <map>
+using namespace std;
+
+int T, n; //테스트케이스 개수 T, 의상의 수 n
+
+string name, type; //옷 이름, 옷의 종류
+map<string, int> m; //옷의 종류와 그 종류에 속하는 옷의 개수를 맵으로 구현
+map<string, int>::iterator i; //맵 순환자
+
+int main()
+{
+    //입력
+    cin>>T; 
+    while(T--){
+        m.clear(); //맵의 원소들 모두 삭제 (테스트 케이스가 2개 이상일 때를 위해)
+        cin>>n; 
+        while(n--){
+            cin>> name >> type; 
+            m[type]++; //무슨 옷인지가 중요X, 그 종류에 속하는 옷의 개수가 중요
+            //clothes[headgear] = 2, clothes[eyewear]=1 , 조합 가짓수 = 3*2-1
+        }
+        int res=1; //곱하기 연산을 위해 1로 초기화
+        for(i=m.begin(); i!=m.end(); i++){ //map 원소 접근을 위한 순회
+            res *= (i->second + 1); //각각의 옷 종류마다 나올 수 있는 경우의 수 구해 곱하기 (+1은 입지 않는 것을 선택) 
+        }
+        cout<<res-1<<'\n'; // -1 : 모든 옷의 종류를 입지 않을것을 선택한 경우 제외, '\n' 빼먹지 말자!
+    }
+
+    return 0;
+}
