@@ -1,0 +1,51 @@
+#include <iostream>
+#include <queue>
+#include <vector>
+
+using namespace std;
+
+vector<int> simulation(int k, queue<int> &q) { //삭제할 k번째 원소, 큐 입력
+    vector<int> result; //요세푸스 순열 담을 배열
+    int cnt = 0; //카운트 변수
+
+    while (!q.empty()) { //큐가 비지 않을 때 까지
+        int x = q.front(); //가장 앞에있는 원소를 x에 저장.
+        q.pop(); //큐에서 가장 앞에 있는 정수를 빼고, 출력.
+        cnt++;//몇번째인지 카운트
+        
+        if (cnt == k) { //k번째 pop하는 원소라면
+            result.push_back(x); //요세푸스 순열에 k번째 pop할 원소 저장.
+            cnt = 0; //카운트변수 다시 초기화
+            continue;
+        }
+        q.push(x); //k번째 pop한 원소가 아니라면 pop한 원소 다시 push
+    }
+    return result; //요세푸스 순열 리턴
+}
+
+/*
+  1. 큐에 1 ~ n까지 값 초기화
+  2. 이후 k 번째 사람 찾기 위해 pop, push 반복
+  3. k번째 pop 일 경우 요세푸스 순열에 저장, 이후 원소 제거 (다시 push 하지 X!)
+*/
+
+int main() {
+    int n, k; // 사람의 수 n명, 제거할 k번째 사람.
+    queue<int> q; //queue 선언
+
+    //입력
+    cin >> n >> k;
+    for (int i = 1; i <= n; i++) { //큐 1~n으로 초기화
+        q.push(i); 
+    }
+    //연산
+    vector<int> result = simulation(k, q); //연산결과를 result 배열에 담기
+    
+    //출력
+    cout << '<';
+    for (int i = 0; i < result.size() - 1; i++) { //뒤에서 2번째원소 까지 출력
+        cout << result[i] << ", ";
+    }
+    cout << result[result.size() - 1] << '>'; //마지막 원소 출력
+    return 0;
+}
