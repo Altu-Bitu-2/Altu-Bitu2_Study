@@ -1,0 +1,53 @@
+#include <iostream>
+#include <vector>
+
+using namespace std;
+
+vector<int> findPattern(int num) { //패턴을 배열로 출력 
+    vector<int> pattern = {num}; //num개의 원소가 0으로 초기화된 배열 pattern 생성
+
+    int temp = num; //아무것도 곱하지 않은 수 a 저장
+    while (num != (temp * num) % 10) { //규칙적인 패턴이 나타나기 전까지
+        temp *= num; // 어떤 수(a)를 곱함
+        temp %= 10; //일의자리 구하기
+        pattern.push_back(temp); //패턴에 원소 추가
+    }
+    return pattern; //패턴 리턴
+}
+
+/**
+ * [분산처리]
+ *
+ * - a^b의 일의 자리를 구하는 문제
+ * - 일의 자리는 0 ~ 9 중 하나 이므로, 어떤 수를 계속 곱해 나가면 일의 자리는 패턴을 가지게 되어 있음
+ *     ex) 2 -> 4 -> 8 -> 6 -> 2 ...
+ * - 0 ~ 9까지 일의 자리 패턴을 미리 구한 후, a의 일의 자리에 대한 (b - 1 % 패턴의 길이)번째 수를 출력하면 된다.
+ * - 0이 나올 경우 10번 컴퓨터가 처리하므로, 0이 출력되지 않도록 예외처리
+ */
+
+int main() {
+    int t, a, b; //테스트 케이스의 개수 t, 데이터의 개수 나타낼 정수 a,b.
+
+    //0 ~ 9까지 일의 자리 패턴 미리 구하기
+    vector<vector<int>> last_digit(10, vector<int>(0)); //일의자리
+    vector<int> pattern_size(10, 1); //패턴의 길이 나타내는 배열
+    for (int i = 0; i < 10; i++) { //0~9까지 일의자리 패턴 구하기
+        last_digit[i] = findPattern(i); //찾아낸 패턴 저장
+        pattern_size[i] = last_digit[i].size(); //일의 자리 패턴의 크기 저장 
+    }
+
+    //입력
+    cin >> t; 
+    while (t--) { //테스트케이수 개수 만큼 반복
+        cin >> a >> b; 
+        a %= 10; //일의자리 저장
+
+        if (a == 0) { //0이 나올경우
+            cout << "10\n";//10번 컴퓨터가 처리
+            continue; //다시 반복문으로
+        }
+        //인덱스가 0부터 시작하므로 (b - 1)로 계산해야 함을 주의
+        cout << last_digit[a][(b - 1) % pattern_size[a]] << '\n'; //a의 일의자리에 대한 (b-1) % 패턴의 길이 번째 수 출력
+    }
+    return 0;
+}
