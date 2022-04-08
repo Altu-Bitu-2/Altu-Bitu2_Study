@@ -1,0 +1,31 @@
+#include <iostream>
+#include <vector>
+
+using namespace std;
+
+int increasinglength=1; // 가장 긴 증가하는 부분 수열의 길이 초기화
+int n; // 수열의 크기
+int maxx; // 차례대로 수열을 관찰했을 때 현재까지 가장 큰 값
+
+int main()
+{
+    //입력
+    cin >> n; // 수열의 크기
+    vector<int> A(n); // 수열을 담을 배열 생성
+    for (int j=0; j<n; j++){
+        cin >> A[j]; // 수열 입력
+    }
+    maxx = A[0]; //수열의 첫번째 원소를 가장 큰 값으로 초기화
+    
+    //증가하는 수열의 길이 구하기
+    for (int i=1; i<n; i++){ //수열의 두번째 원소부터 차례대로 확인
+        if (maxx < A[i]){ //증가하는 수열이면
+        increasinglength++; //길이 증가
+        maxx = A[i+1]; //최댓값 갱신
+        }
+    }
+    
+    cout<<increasinglength;
+    
+    return 0;
+}
