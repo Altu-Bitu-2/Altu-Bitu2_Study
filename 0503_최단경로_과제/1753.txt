@@ -1,0 +1,72 @@
+#include <iostream>
+#include <vector>
+#include <queue>
+
+using namespace std;
+typedef pair<int, int> ci; //총 감염되는 컴퓨터 수, 마지막 컴퓨터가 감염되기까지 걸리는 시간 쌍으로 담을 변수
+const int INF = 1e7; //최대 n-1개의 연결관계 있으므로 -> n * (가중치 최대값)
+
+//다익스트라
+ci dijkstra(int start, int v, vector<vector<ci>> &graph) { //해킹당한 컴퓨터 번호, 모든 컴퓨터 개수, 의존성정보 인수로 받음
+    //현재 탐색다는 중간
+    priority_queue<ci, vector<ci>, greater<>> pq; 
+    //first : 간선 가중치(걸린시간) , second: 컴퓨터 번호
+    vector<int> dist(v + 1, INF); //가중치 담을 배열
+
+    dist[start] = 0; //시작 컴퓨터 초기화
+    pq.push({0, start}); //해킹당하는데 걸린 시간 0임
+    int cnt = 0, t = 0; //총 해킹당한 컴퓨터수, 마지막 컴퓨터 감염되기까지 걸린 시간
+    while (!pq.empty()) { //모든 컴퓨터 검사
+        int weight = pq.top().first; //현재 컴퓨터 까지 걸린 시간
+        int node = pq.top().second;
+        pq.pop(); //검사한 컴퓨터는 pop 연산
+
+        if (weight > dist[node]) { //이미 최소 시간으로 기록된 컴퓨터
+            continue; //탐색에서 배제
+        }
+        cnt++; //해킹당한 컴퓨터수 +1
+        t = weight; //마지막 컴퓨터가 해킹당하는데 걸린 시간
+        for (int i = 0; i < graph[node].size(); i++) { //
+            int next_node = graph[node][i].first; //연결되어 있는 다음 정점
+            int next_weight = weight + graph[node][i].second; //새로운 가중치 갱신
+            if (next_weight < dist[next_node]) { //더 걸린 시간이 적다면
+                dist[next_node] = next_weight; //가중치 갱신
+                pq.push({next_weight, next_node}); //새로운 가중치(시간)와 노드(컴퓨터) 넣음
+            }
+        }
+    }
+    return {cnt, t}; //결과 리턴
+}
+
+/**
+ * [해킹]
+ *
+ * - 기본적인 다익스트라 문제
+ * - 다익스트라 내에서 이미 더 짧은 경로가 존재하는 정점은 탐색에서 배제하면서, 탐색하는 정점의 수와 마지막 시간을 저장
+ *
+ * !주의! 그래프 생성 시, a가 b를 의존한다는 건 b 감염 후 a가 감염된다는 뜻이므로 b -> a 방향임
+ */
+
+int main() {
+    int t, n, d, c, a, b, s; //테스트케이스 개수, 
+    //컴퓨터 개수, 의존성 개수, 해킹당한 컴퓨터 번호
+    //의존성을 나타내는 정보들 : a가 b를 의존하며, b가 감염될 경우 s초후 a도 감염
+
+    //입력
+    cin >> t;
+    while (t--) {//테스트 케이수 개수 만큼
+        cin >> n >> d >> c; //입력
+        vector<vector<ci>> graph(n + 1, vector<ci>(0)); //방향 그래프
+        while (d--) {//의존성 개수 만큼
+            cin >> a >> b >> s; //의존성 정보 입력
+            graph[b].push_back({a, s}); //방향 그래프에 담기
+        }
+
+        //연산
+        ci ans = dijkstra(c, n, graph); //해킹당한 컴퓨터 번호, 컴퓨터 개수, 의존성정보 인수로 넣음
+
+        //출력
+        cout << ans.first << ' ' << ans.second << '\n';
+    }
+    return 0;
+}
