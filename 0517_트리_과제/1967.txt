@@ -1,0 +1,53 @@
+#include <iostream>
+#include <vector>
+
+using namespace std;
+typedef pair<int, int> ci; //지름 구성하는 노드와 그 노드까지의 거리를 담을 순서 쌍 선언
+
+ci dfs(int node, int parent, vector<vector<ci>> &graph) { //dfs 탐색할 노드와 부모노드, 그래프 정보 입력 받음
+    int pos = node, len = 0; //지름을 구성하는 노드 중 하나, 그 노드까지의 거리
+    for (int i = 0; i < graph[node].size(); i++) { //그래프 노드의 크기만큼 탐색
+        int next_node = graph[node][i].first; //탐색할 노드 차례대로 넣어둠 
+        if (next_node == parent) { //다음 노드가 부모 노드라면
+            continue; //조건분 빠져나와서 자식 노드에 대해 dfs 탐색
+        }
+
+        ci dfs_search = dfs(next_node, node, graph); //자식 노드에 대해 dfs 탐색
+        if (graph[node][i].second + dfs_search.second > len) { //기존 거리보다 길다면 갱신
+            len = graph[node][i].second + dfs_search.second; //가장 길이가 긴 노드로 길이 갱신
+            pos = dfs_search.first; //지름 구성하는 노드 갱신
+        }
+    }
+    return {pos, len}; //지금 구성하는 노드와 그 길이 리턴
+}
+
+/**
+ * [트리의 지름]
+ *
+ * 1. 지름을 이루는 두 점은 모두 리프 노드
+ * 2. 임의의 한 노드에서 가장 멀리 있는 노드(리프 노드)는 지름을 이루는 노드 중 하나
+ * 3. 지름을 이루는 노드에서 가장 멀리 있는 노드는 지름을 이루는 다른 노드
+ *
+ * 부모->자식의 방향만 저장하면 리프 노드에서 다른 리프 노드로 탐색할 수 없으므로 무방향 그래프로 저장
+ */
+
+int main() {
+    int n, p, c, w; //노드의 개수, 간선에 대한 정보 3가지 : 각각 부모,자식 노드의 번호, 간선에 대한 정보
+
+    //입력
+    cin >> n;
+    vector<vector<ci>> graph(n + 1, vector<ci>(0)); // 노드의 개수 +1 만큼 
+    for (int i = 1; i < n; i++) { //무방향 그래프로 만들기
+        cin >> p >> c >> w; //간선 정보 입력 받음
+        graph[p].push_back({c, w}); //부모 노드의 자식과 그 가중치 입력
+        graph[c].push_back({p, w}); //자식 노드의 부도와 그 가중치 입력
+    }
+
+    //연산
+    ci first_node = dfs(1, -1, graph); //지름을 구성하는 노드 하나 찾기
+    ci second_node = dfs(first_node.first, -1, graph); //지름을 구성하는 다른 노드 찾기
+
+    //출력
+    cout << second_node.second; 
+    return 0;
+}

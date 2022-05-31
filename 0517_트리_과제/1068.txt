@@ -1,0 +1,53 @@
+#include <iostream>
+#include <vector>
+
+using namespace std;
+
+vector<vector<int>> tree; //트리 구조 생성
+
+//주어진 정점을 지웠을 때의 리프 노드의 수
+int eraseLeafCnt(int node, int &erase_node) {// 지우는 노드와 주소 정보 인수로 받음
+    if (node == erase_node) {//지우는 노드가 root 노드일 경우
+        return 0; //0개
+    }
+    if (tree[node].empty() || (tree[node].size() == 1 && tree[node][0] == erase_node)) {
+        //탐색하는 node가 비어있거나 트리 사이즈가 1 이거나 0번째 노드가 지우는 노드라면
+        return 1; //1개
+    }
+    
+    int cnt = 0; //개수 세기 전 값 초기화
+    for (int i = 0; i < tree[node].size(); i++) { //노드 사이즈 만큼 노드 탐색
+        cnt += eraseLeafCnt(tree[node][i], erase_node); //계속해서 값 더해줌
+    }
+    return cnt; //값 리턴
+}
+
+/**
+ * [트리]
+ *
+ * 기존 리프 노드 개수를 세는 dfs 탐색에서 지우는 정점을 만나면 더 이상 탐색하지 않고 0을 리턴
+ *
+ * !주의! 지우는 정점이 해당 부모 노드의 유일한 자식 노드였을 경우, 해당 정점을 지우면 부모 노드가 리프 노드가 돼서 개수가 1 증가함을 주의
+ * !주의! 루트 노드가 항상 0이 아님을 주의
+ */
+
+int main() {
+    int n, par, root, erase_node; //트리의 노드 개수, 부모노드, 루트노드, 지울 노드
+
+    //입력
+    cin >> n; //노드 개수 입력받음
+    tree.assign(n, vector<int>(0)); //트리에 입력된 노드를 넣을 배열 생성하여 초기화
+    for (int i = 0; i < n; i++) { //노드 개수 만큼 (0번 ~ n-1번)
+        cin >> par; //각 노드의 부모 입력
+        if (par == -1) { //부모가 없다면 (루트) -> -1값 가짐
+            root = i; // root를 현재 주어진 노드로 갱신
+            continue;  //조건문 빠져 나옴
+        }
+        tree[par].push_back(i); //트리에서 부모 노드 삽입
+    }
+    cin >> erase_node; //지울 노드 번호
+
+    //연산 & 출력
+    cout << eraseLeafCnt(root, erase_node); //노드 지우고 남은 리프 노드개수 구하는 함수 호출
+    return 0;
+}
