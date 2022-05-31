@@ -1,0 +1,58 @@
+#include <iostream>
+#include <vector>
+
+using namespace std;
+
+vector<int> parent; // 부모노드 담을 배열
+
+//Find 연산
+int findParent(int node) {
+    if (parent[node] < 0) { //음수이면
+        return node; //정점 노드이므로 그대로 리턴
+    }
+    return parent[node] = findParent(parent[node]); //부모노드가 맞으면 부모노드 값 갱신
+}
+
+//Union 연산
+bool unionInput(int x, int y) {
+    int xp = findParent(x); //x의 부모 저장
+    int yp = findParent(y); //y의 부모 저장
+
+    if (xp == yp) { //같은 노드이면 
+        return false; //false 리턴
+    }
+    if (parent[xp] < parent[yp]) { //크기가 작은 경우가 더 높이가 큰 노드.
+        parent[xp] += parent[yp]; //새로운 루트 xp 추가
+        parent[yp] = xp;
+    } else {//높이가 더 작은 노드
+        parent[yp] += parent[xp]; //새로운 루트 yp 추가
+        parent[xp] = yp;
+    }
+    return true; //다른 노드일경우 true 기턴
+}
+
+/**
+ * [사이클 게임]
+ *
+ * 사이클이 발생한 순간 = 같은 집합에 있는 원소 두 개를 유니온하려 할 때
+ * unionInput 함수의 반환형을 bool로 선언하여 cycle이 생성되는 순간 발견하기
+ */
+
+int main() {
+    int n, m, x, y; //점의 개수, 진행된 차례의 수, 해당 플레이어가 선택한 두 점의 번호
+
+    //입력
+    cin >> n >> m;
+    parent.assign(n, -1); // 자기 자신이 정점인 루트 정점 배열 초기화
+    for (int i = 0; i < m; i++) { //진행된 차례의 수만큼
+        cin >> x >> y; //해당 플레이어가 선택한 두 점의 번호 입력
+
+        //연산 & 출력
+        if (!unionInput(x, y)) { //사이클이 생성됨
+            cout << i + 1;
+            return 0;
+        }
+    }
+    cout << 0;
+    return 0;
+}

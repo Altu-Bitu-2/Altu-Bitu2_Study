@@ -1,0 +1,79 @@
+#include <iostream>
+#include <vector>
+#include <map>
+
+using namespace std;
+const int MAX = 2e5; //친구 관계가 모두 다른 사용자로 들어왔을 때의 정점 최댓값
+
+vector<int> parent(MAX + 1, -1); // 부모노드 담을 배열
+map<string, int> people; //사용자의 아이디와 친구의 수 담을 맵 자료구조
+
+//Find 연산
+int findParent(int node) {
+    if (parent[node] < 0) { //음수이면
+        return node; //정점 노드이므로 그대로 리턴
+    }
+    return parent[node] = findParent(parent[node]); //부모노드가 맞으면 부모노드 값 갱신
+}
+
+//Union 연산
+void unionInput(int x, int y) {
+    int xp = findParent(x); //x의 부모 저장
+    int yp = findParent(y); //y의 부모 저장
+
+    if (xp == yp) { //부모노드가 같다면
+        return; //이미 같은 집합이므로 리턴
+    }
+    //집합의 크기를 비교
+    if (parent[xp] < parent[yp]) { //크기가 작은 경우가 더 높이가 큰 노드.  
+        parent[xp] += parent[yp]; //새로운 루트 xp 추가
+        parent[yp] = xp;
+    } else {//높이가 더 작은 노드
+        parent[yp] += parent[xp]; //새로운 루트 yp 추가
+        parent[xp] = yp;
+    }
+}
+
+/**
+ * [친구 네트워크]
+ *
+ * 1. weighted union find -> 루트 정점에 친구의 수(집합 원소 수) 저장
+ * 2. 친구 네트워크에 몇 명 있는지 구하기 -> 루트 정점의 parent값 접근
+ *
+ * !주의! 정점이 문자열로 들어오므로 map을 활용해 string을 int로 매핑
+ */
+
+int main() {
+    ios_base::sync_with_stdio(false); //입출력 속도 향상하기 위함.
+    cin.tie(NULL);
+    cout.tie(NULL);
+
+    int t, f; //테스트 케이스의 개수, 친구 관계의 수
+    string a, b; //친구 관계인 두 사용자의 아이디
+
+    //입력
+    cin >> t;
+    while (t--) { //반복되는 테스트 케이스만큼
+        int idx = 1; //정점과 매핑할 수
+        parent.assign(MAX + 1, -1); //각각 자기 자신이 정점인 배열로 초기화
+
+        cin >> f; //친구관계의 수 입력
+        while (f--) { //각 친구관계 마다
+            cin >> a >> b; //두 사용자의 아이디 입력
+            if (!people[a]) { //
+                people[a] = idx++; //친구의 수 증가시킴.
+            }
+            if (!people[b]) {
+                people[b] = idx++; //친구의 수 증가시킴.
+            }
+
+            //연산
+            int x = people[a], y = people[b]; //a와 b 친구관계 저장
+            unionInput(x, y); //유니온 연산
+
+            //출력
+            cout << -parent[findParent(x)] << '\n';
+        }
+    }
+    return 0;
+}
